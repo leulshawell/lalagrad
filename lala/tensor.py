@@ -227,7 +227,9 @@ class Tensor:
     
     def spow(self, exp): return ScalarPower(self, exp)()
 
-    def get_item(self):
+    
+
+    def item(self): 
         assert not len(self.shape), "get_item only defined for scalar "
         return self.storage._get_pointer(self.dtype.ptr_t)[0]
 

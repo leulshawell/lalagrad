@@ -13,7 +13,7 @@ import subprocess
 
 _c_lib_kernel_header = "_c_lib.h"
 _c_lib_shared = "./lala/_C/shared"
-_c_lib_name = "_c_lib_tensor" #final cffi Python extention code generated for the according to the Python C API
+_c_lib_name = "_c_lib_tensor" #final cffi Python extention code generated according to the Python C API
 
 
 #TODO: also add options for clang compile
@@ -53,7 +53,7 @@ except FileNotFoundError:
     print('gcc not found on you system')
     exit()
 except:
-    #TODO: give the option to download a the _c_lib_tensor.so in case of a compilet missing
+    #TODO: give the option to download a the _c_lib_tensor.so in case of a compiler missing
     def download_lib(): pass
     print("Error compiling lib")
     print("Downloading lib binary")

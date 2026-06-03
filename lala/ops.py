@@ -467,7 +467,7 @@ class Matmul(Operation):
             rhs_t = rhs.T.contiguous()
             res = Matmul(upstream_m, rhs_t)
             lgrad_b,_, __ = res.forward()
-            res.detach()
+            res.detach(rhs_t)
             return lgrad_b
         
         else:
