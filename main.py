@@ -7,12 +7,15 @@ input_features, neurons = 2, 2
 
 class MLP:
     def __init__(self, in_dim: int, out_dim: int,  emb_dim: int, seq_len):
-        self.wu = lala.rand(emb_dim, in_dim) #project up weights
-        self.bu = lala.rand(emb_dim, seq_len) #project up bias
+        self.wu = lala.rand(emb_dim, in_dim, requires_grad=True) #project up weights
+        self.bu = lala.rand(emb_dim, seq_len, requires_grad=True) #project up bias
         
-        self.wd = lala.rand(out_dim, emb_dim) #project down weights
-        self.bd = lala.rand(out_dim, seq_len) #project down biases   
+        self.wd = lala.rand(out_dim, emb_dim, requires_grad=True) #project down weights
+        self.bd = lala.rand(out_dim, seq_len, requires_grad=True) #project down biases   
         
+
+    def parametes(self):
+        return [self.wu, self.wd, self.bu, self.bd]
 
     def forward(self, x: lala.Tensor):
         x = self.wu @ x + self.bu
@@ -31,22 +34,20 @@ class MLP:
         return loss_
     
     def step(self):
-        for w, b in self.layers:
+        for param in self.parametes():
         #update weights and biases
-            w -= w.grad
-            b -= b.grad
-            w.detach()
-            b.detach()
+            param -= param.grad
+            param.detach()  #this is because we don't want the grad upate ops in the graph
 
             #remove grad for next run
-            w.grad = None; b.grad = None
+            param.grad = None
 
 
 mlp = MLP(3, 3, 3, 1)
 
 
 
-epoch, batch = 25, 5
+epoch, batch = 250, 50
 
 losses = []
 for epoch in range(epoch):

@@ -1,0 +1,33 @@
+
+    <html>
+    <head>
+      <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    </head>
+    <body>
+      <div id="mynetwork" style="height: 600px;"></div>
+      <div id="detail" style="position: fixed; width: 400px; height: 400px; top:0; left: 0; border: black; backgroung-color: 'red'"/>
+      <script>
+        var selectedNode;
+        var nodes = new vis.DataSet([{'id': 136337423904224, 'label': 'Tensor(shape=<(2, 1)> dtype=<float32> grad=<Add>)', 'shape': 'box', 'color': '#aa5555'}, {'id': 136337423897840, 'label': 'Add', 'color': 'green', 'shape': 'circle'}, {'id': 136337423896976, 'label': 'Tensor(shape=<(2, 1)> dtype=<float32> grad=<MMul>)', 'shape': 'box'}, {'id': 136337423902400, 'label': 'MMul', 'color': 'green', 'shape': 'circle'}, {'id': 136337430228448, 'label': 'Tensor(shape=<(2, 3)> dtype=<float32> grad=<None>)', 'shape': 'box'}, {'id': 136337423897888, 'label': 'Tensor(shape=<(3, 1)> dtype=<float32> grad=<None>)', 'shape': 'box', 'color': 'yellow'}, {'id': 136337423475696, 'label': 'Tensor(shape=<(2, 1)> dtype=<float32> grad=<None>)', 'shape': 'box'}]);
+        var edges = new vis.DataSet([{'from': 136337423904224, 'to': 136337423897840}, {'from': 136337423896976, 'to': 136337423897840}, {'from': 136337423896976, 'to': 136337423902400}, {'from': 136337430228448, 'to': 136337423902400}, {'from': 136337423897888, 'to': 136337423902400}, {'from': 136337423475696, 'to': 136337423897840}]);
+        var container = document.getElementById('mynetwork');
+        var details = document.getElementById('mynetwork');
+        var data = { nodes: nodes, edges: edges };
+        var options = {layout: { hierarchical: { direction: "LR", nodeSpacing: 150, levelSeparation: 200 } }, nodes: { shape: "box" }, edges: { arrows: "to"}, physics: false}
+        var network = new vis.Network(container, data, options);
+
+        network.on("click", function(params) {
+            if (params.nodes.length > 0) {
+                var nodeId = params.nodes[0];
+                var node = nodes.get(nodeId);
+                selectedNode = node
+                h1 = document.createElement('h1')
+                h1.text = node.label
+                details.addChild()
+            }
+        });
+
+      </script>
+    </body>
+    </html>
+    
