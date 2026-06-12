@@ -6,17 +6,23 @@ from lala.functional import relu
 input_features, neurons = 2, 2
 
 class MLP:
-    def __init__(self, in_dim: int, out_dim,  layers: List[int]):
-        self.layers = [(lala.rand(2, 3, requires_grad=True), lala.rand(2, 1, requires_grad=True))]
+    def __init__(self, in_dim: int, out_dim: int,  emb_dim: int, seq_len):
+        self.wu = lala.rand(emb_dim, in_dim) #project up weights
+        self.bu = lala.rand(emb_dim, seq_len) #project up bias
+        
+        self.wd = lala.rand(out_dim, emb_dim) #project down weights
+        self.bd = lala.rand(out_dim, seq_len) #project down biases   
+        
 
     def forward(self, x: lala.Tensor):
-        for w, b in self.layers:
-            x = w @ x + b
+        x = self.wu @ x + self.bu
+        x = self.wd @ x + self.bd
         return x
         
     def fit(self, input_: lala.Tensor, target: lala.Tensor):
         logits = self.forward(input_)
 
+        #mean squared error
         loss = (target - logits).mean().spow(2)
 
         loss_  = loss.item()
@@ -36,7 +42,7 @@ class MLP:
             w.grad = None; b.grad = None
 
 
-mlp = MLP((2, 3), (2, 3), [])
+mlp = MLP(3, 3, 3, 1)
 
 
 
